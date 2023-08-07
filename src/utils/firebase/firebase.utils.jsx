@@ -14,13 +14,14 @@ const firebaseConfig = {
 // Initialize Firebase
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-const provider = new firebase.auth.GoogleAuthProvider();
-provider.setCustomParameters({
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+googleProvider.setCustomParameters({
     prompt: 'select_account'
 });
 
+
 export const auth = firebase.auth();
-export const signInWithGooglePopup = () => auth.signInWithPopup(provider);
+export const signInWithGooglePopup = () => auth.signInWithPopup(googleProvider);
 
 export default firebaseApp; 
 
@@ -28,7 +29,10 @@ export default firebaseApp;
 
 // FireStore 
 export const db = firebase.firestore();
-export const createUserDocumentFromAuth = async (userAuth) => {
+export const createUserDocumentFromAuth = async (userAuth, additionalinformation={}) => {
+
+    if(!userAuth) return;
+
     // user document refrence
     const userDocRef = db.collection('users').doc(userAuth.uid);
 
@@ -44,11 +48,26 @@ export const createUserDocumentFromAuth = async (userAuth) => {
                 email,
                 uid,
                 createdAt,
+                ...additionalinformation,
             });
         } catch (error) {
             console.error('Error creating user document:', error.message);
         }
     }
-    
+
     return userDocRef;
 }
+
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+    if(!email || !password) return;
+
+    try {
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        return userCredential;
+        // const user = userCredential.user;
+        // Optionally, you can do something with the new user, such as saving additional data.
+        // console.log('User created:', user);
+    } catch (error) {
+        console.error('Error creating user:', error);
+    }
+};
