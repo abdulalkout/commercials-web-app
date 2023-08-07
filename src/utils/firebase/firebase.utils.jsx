@@ -64,10 +64,21 @@ export const createAuthUserWithEmailAndPassword = async (email, password) => {
     try {
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         return userCredential;
-        // const user = userCredential.user;
-        // Optionally, you can do something with the new user, such as saving additional data.
-        // console.log('User created:', user);
     } catch (error) {
         console.error('Error creating user:', error);
     }
+};
+
+
+
+//signInWithEmailAndPassword
+export const signInAuthUserWithEmailAndPassword = async (email, password) => {
+    if(!email || !password) return;
+    const userCredential = await auth.signInWithEmailAndPassword(email, password)
+    return userCredential;
+    // try {
+        
+    // } catch (error) {
+    //     console.error('please make sure of Email or passwored : ', error);
+    // }
 };
