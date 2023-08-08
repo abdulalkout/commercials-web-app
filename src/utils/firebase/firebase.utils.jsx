@@ -82,3 +82,9 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
     //     console.error('please make sure of Email or passwored : ', error);
     // }
 };
+
+
+export const signOutUser = async() => await auth.signOut();
+
+
+export const onAuthStateChangeListener = (callback) => auth.onAuthStateChanged(callback);
