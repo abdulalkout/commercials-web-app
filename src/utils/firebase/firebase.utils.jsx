@@ -76,11 +76,6 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
     if(!email || !password) return;
     const userCredential = await auth.signInWithEmailAndPassword(email, password)
     return userCredential;
-    // try {
-        
-    // } catch (error) {
-    //     console.error('please make sure of Email or passwored : ', error);
-    // }
 };
 
 
