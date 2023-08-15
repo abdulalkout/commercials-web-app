@@ -1,6 +1,11 @@
+import { queries } from '@testing-library/react';
 import firebase from 'firebase/app';
 import 'firebase/auth'; 
 import 'firebase/firestore';
+import { getFirestore, collection, query, getDocs } from 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyD4OMvy8Z2nc24Y7lZdqZuJgNNtOQYkrek",
@@ -29,6 +34,65 @@ export default firebaseApp;
 
 // FireStore 
 export const db = firebase.firestore();
+
+
+// adding collection to fireStore
+export const addCollectionAndDocument = async (collectionKey, objectsToAdd) => {
+    const collectionRef = db.collection(collectionKey);
+    const batch = db.batch();
+
+    objectsToAdd.forEach((object)=>{
+        const docref = collectionRef.doc(object.title.toLowerCase());
+        batch.set(docref, object)
+    })
+
+    await batch.commit();
+    console.log('done');
+}
+
+// export const getCategoriesAndDocuments = async () => {
+//     const collectionRef = db.collection('categories');
+
+//     try {
+//         const querySnapshot = await collectionRef.get();
+
+//         if (querySnapshot.empty) {
+//             console.log('No documents found in "categories" collection.');
+//             return null;
+//         }
+
+//         const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+//             const { title, items } = docSnapshot.data();
+//             acc[title.toLowerCase()] = items;
+//             return acc;
+//         }, {});
+
+//         return categoryMap;
+//     } catch (error) {
+//         // Handle any errors here
+//         console.error('Error fetching categories:', error);
+//         throw error;
+//     }
+// };
+
+
+export const getCategoriesAndDocuments = async () => {
+    const collectionRef = db.collection('categories');
+    // const q = collectionRef.queries();
+
+    const querySnapShot = await collectionRef.get();
+
+
+    const categoryMap = querySnapShot.docs.reduce((acc, docSnapshot)=>{
+        const {title, items} = docSnapshot.data();
+        acc[title.toLowerCase()] = items;
+        return acc;
+    },{})
+
+
+    return categoryMap;
+}
+
 export const createUserDocumentFromAuth = async (userAuth, additionalinformation={}) => {
 
     if(!userAuth) return;

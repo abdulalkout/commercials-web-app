@@ -1,8 +1,8 @@
 import React from "react";
-import Button from "../button/button.component";
+import Button, {BUTTON_TYPE_CLASSES} from "../button/button.component";
 import { useState } from "react";
 import FormInput from "../form-input/form-input.component";
-import './sign-in-form.style.scss';
+import { SigninContainer, ButtensContainer, SigninTitle } from "./sign-in-form.style";
 import {signInWithGooglePopup, 
     createUserDocumentFromAuth, 
     auth, 
@@ -32,7 +32,7 @@ const SignInForm = () => {
             await signInWithGooglePopup();
         } catch (error) {
             console.log('the Popup was closed');
-        }
+        } 
     }
 
     // handle once the form submited 
@@ -68,8 +68,8 @@ const SignInForm = () => {
 
 
     return(
-        <div className="sign-in-container">
-            <h2>Already have an account? </h2>
+        <SigninContainer>
+            <SigninTitle>Already have an account? </SigninTitle>
             <span>Sign in with your email and password</span>
             <form onSubmit={handleSubmit}>
                 <FormInput
@@ -89,26 +89,13 @@ const SignInForm = () => {
                     value={password}
                 />
             
-                <div className="buttens-container">
-                    <Button type='submit' buttonType='inverted' >SIGN IN</Button>
-                    <Button type='button' buttonType='google' onClick={signInWithGoogle}>GOOGLE SIGN IN</Button>
-                </div>
+                <ButtensContainer>
+                    <Button type='submit' >SIGN IN</Button>
+                    <Button type='button' buttonType={BUTTON_TYPE_CLASSES.google} onClick={signInWithGoogle}>GOOGLE SIGN IN</Button>
+                </ButtensContainer>
             </form>
-        </div>
+        </SigninContainer>
     )
 }
 
 export default SignInForm;
-
-
-// const signIn = () => {
-//     auth.signInWithEmailAndPassword(auth, email, password)
-//         .then((userCredential) => {
-//             // Signed in
-//             const user = userCredential.user;
-//             // ...
-//         })
-//         .catch((error) => {
-//             console.log('please make sure of Email or passwored ')
-//         });
-// }
