@@ -5,7 +5,27 @@ import Authentication from "./routes/authentication/authentication.component.jsx
 import Shop from "./routes/shop/shop.component";
 import CheckOut from "./routes/checkout/checkout.component";
 
+import { onAuthStateChangeListener, createUserDocumentFromAuth,getCategoriesAndDocuments } from "./utils/firebase/firebase.utils";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "./store/user/user.action";
+
+
+
 const App = () => {
+
+  const dispatch =useDispatch();
+
+  useEffect( ()=>{
+    const unsubcribe = onAuthStateChangeListener((user)=>{
+        if(user){
+            createUserDocumentFromAuth(user);
+        }
+        dispatch(setCurrentUser(user));
+    });
+
+    return unsubcribe;
+  }, []);
 
   return (
     <Routes>
