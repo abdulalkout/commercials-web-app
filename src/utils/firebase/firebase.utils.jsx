@@ -48,49 +48,13 @@ export const addCollectionAndDocument = async (collectionKey, objectsToAdd) => {
 
     await batch.commit();
     console.log('done');
-}
-
-// export const getCategoriesAndDocuments = async () => {
-//     const collectionRef = db.collection('categories');
-
-//     try {
-//         const querySnapshot = await collectionRef.get();
-
-//         if (querySnapshot.empty) {
-//             console.log('No documents found in "categories" collection.');
-//             return null;
-//         }
-
-//         const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-//             const { title, items } = docSnapshot.data();
-//             acc[title.toLowerCase()] = items;
-//             return acc;
-//         }, {});
-
-//         return categoryMap;
-//     } catch (error) {
-//         // Handle any errors here
-//         console.error('Error fetching categories:', error);
-//         throw error;
-//     }
-// };
-
+};
 
 export const getCategoriesAndDocuments = async () => {
     const collectionRef = db.collection('categories');
-    // const q = collectionRef.queries();
-
     const querySnapShot = await collectionRef.get();
-
-
-    const categoryMap = querySnapShot.docs.reduce((acc, docSnapshot)=>{
-        const {title, items} = docSnapshot.data();
-        acc[title.toLowerCase()] = items;
-        return acc;
-    },{})
-
-
-    return categoryMap;
+    
+    return querySnapShot.docs.map((docSnapshot) => docSnapshot.data());
 }
 
 export const createUserDocumentFromAuth = async (userAuth, additionalinformation={}) => {

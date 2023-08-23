@@ -9,12 +9,14 @@ import { signOutUser } from "../../utils/firebase/firebase.utils";
 import { NavigationComponent,LogoContainer,NavLink,NavLinks } from "./navigation.style";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { selectCurrentUser } from "../../store/user/user.selector";
+import { selectIsCartOpen } from "../../store/cart/cart.selector";
 
 const Navigation = () => {
 
     // const {currentUser} =useContext(UserContext);
     const currentUser = useSelector(selectCurrentUser);  
-    const {isCartOpen} = useContext(CartContext);
+    const isCartOpen = useSelector(selectIsCartOpen);
+    // const {isCartOpen} = useContext(CartContext);
 
     return(
       <Fragment>
